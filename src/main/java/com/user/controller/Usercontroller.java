@@ -1,0 +1,56 @@
+package com.user.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.user.entity.User;
+import com.user.service.UserService;
+
+@RestController
+@RequestMapping("/user")
+public class Usercontroller {
+
+	@Autowired
+	private UserService userService;
+	
+	
+	@GetMapping ("/{userId}")
+	
+	public User getUser (@PathVariable("userId")Long UserId)
+	{
+		return this.userService.getUser(UserId);
+	}
+
+	@PostMapping("/user")
+	public ResponseEntity<?> save(@RequestBody User user){
+		long mobileNo = userService.save(user);
+		return ResponseEntity.ok("USer record saved successfully with : "+mobileNo);
+	}
+	
+	@PutMapping("/user/{mobileNo}")
+	public ResponseEntity<?> update(@PathVariable("mobileNo") long mobileNo, @RequestBody User user)
+	{
+		userService.update(mobileNo, user);
+		
+		return ResponseEntity.ok("User record updated successfully");
+	}
+	
+	@DeleteMapping("/user/{mobileNo}")
+	public ResponseEntity<?> delete(@PathVariable("mobileNo") long mobileNo)
+	{
+		userService.delete(mobileNo);
+		
+		return ResponseEntity.ok().body("Record deleted successfully");
+	}
+	
+	
+	
+}
